@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  password_gen:
+    restart: on-failure
+    build: app
+    command: python manage.py runserver -h 0.0.0.0
+    volumes:
+      - ../src/app/:/usr/src/app/
+    ports:
+      - 5000:5000
+    env_file:
+      - app/env_file
+    depends_on:
+      - db
+
+  db:
+    restart: always
+    build: ./db
+    image: postgres:12.0-alpine
+    volumes:
+      - ./data/pgdb:/var/lib/postgresql/data:rw
+    ports:
+      - 5432:5432
+    env_file:
+      - db/env_file
+
+volumes:
+  postgres_data:
