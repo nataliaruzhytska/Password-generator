@@ -1,0 +1,6 @@
+ENV=DEV
+SQLALCHEMY_DATABASE_URI = postgresql://pass_gen_admin:simplepass@db:5432/pass_gen_db
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+SQL_HOST=db
+SQL_PORT=5432
+DATABASE=postgres
