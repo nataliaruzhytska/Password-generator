@@ -1,6 +1,6 @@
 import json
 import hashlib
-from flask import request, jsonify, session
+from flask import request, session
 from flask_restful import Resource, marshal_with
 import requests
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -13,7 +13,8 @@ class PasswordResourse(Resource):
 
     def post(self):
         """
-        Homepage with link to generate password
+        Homepage with link to generate password.
+        :return: str
         """
         n = request.form.get('n') or '12'
         uppercase = request.form.get('uppercase')
@@ -28,6 +29,10 @@ class PasswordSave(Resource):
 
     @marshal_with(password_fields)
     def get(self):
+        """
+        Show stored password for user is login
+        :return: str
+        """
         if session["logged_in"]:
             try:
                 user_id = int(session["user_id"])
@@ -40,12 +45,17 @@ class PasswordSave(Resource):
             return "You are not logged in", 401
 
     def post(self):
+        """
+        Save password in database for user is login
+        :return: str
+        """
         data = json.loads(request.data)
         if session["logged_in"]:
             password = data.get("password")
             user_id = int(session["user_id"])
+            hash_p = hashlib.sha1(password.encode('utf-8')).hexdigest()
             try:
-                new_pass = StoredPass(password=password, user_id=user_id)
+                new_pass = StoredPass(password=password, user_id=user_id, hash_p=hash_p)
                 db.session.add(new_pass)
                 db.session.commit()
                 return 'Password saved successfully', 201
@@ -55,6 +65,11 @@ class PasswordSave(Resource):
             return "You are not logged in", 401
 
     def delete(self, password_id):
+        """
+        Save password in database for user is login
+        :param password_id:
+        :return: str
+        """
         if session["logged_in"]:
             try:
                 password = StoredPass.query.get(password_id)
@@ -70,8 +85,8 @@ class PasswordSave(Resource):
 class Login(Resource):
     def post(self):
         """
-        Add to session new value logged_in = True and return success msg
-        if user registered and put correct login and password
+        Add to session new values logged_in = True and user_id = user.id
+        return success msg if user registered and put correct login and password
         :return: str
         """
         data = json.loads(request.data)
@@ -105,7 +120,7 @@ class Registration(Resource):
     def post(self):
         """
         Add new user
-        :return:
+        :return: str
         """
         data = json.loads(request.data)
         try:
@@ -119,11 +134,20 @@ class Registration(Resource):
 
 
 class CheckPass(Resource):
+
     def get(self, password_id):
+        """
+        Check password SHA1 hash in online hash base
+        using api https://haveibeenpwned.com/API/v3
+        :param password_id: int
+        :return: str
+        """
         password = StoredPass.query.get(password_id)
-        check_pass = (hashlib.sha1(b'{password.password}')).hexdigest()[:5].upper()
-        hash_pass = (hashlib.sha1(b'{password.password}')).hexdigest()[5:].upper()
-        resp = requests.get(f'{CHECK_PASS_API}{check_pass}', )
+        check_pass = password.hash_p[:5].upper()
+        hash_pass = password.hash_p[5:].upper()
+        print(password)
+        print(hash_pass)
+        resp = requests.get(f'{CHECK_PASS_API}{check_pass}')
         if resp.status_code != 200:
             return "An error occurred", resp.status_code
         else:

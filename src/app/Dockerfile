@@ -7,7 +7,6 @@ ENV PYTHONUNBUFFERED 1
 
 # copy project
 COPY . /usr/src/app/
-# install dependencies
 
 # set work directory
 WORKDIR /usr/src/app

@@ -5,6 +5,10 @@ from api_pass import pass_bp, auth_bp, save_pass_bp, check_pass_bp
 
 
 def create_app():
+    """
+    Create Flask-application
+    :return: app
+    """
     app = Flask(__name__)
     app.config.from_object(get_config(env='DEV'))
     db.init_app(app)

@@ -6,6 +6,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 
 
+# User model for authentication
 class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -13,12 +14,16 @@ class User(db.Model):
     password = db.Column(db.String(), nullable=False)
 
 
+# Model for storage user's generated passwords
 class StoredPass(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     password = db.Column(db.String(80), nullable=False)
+    hash_p = db.Column(db.String(80), nullable=False)
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
 
 
-password_fields = {'password': fields.String,
+# structure json response
+password_fields = {'id': fields.Integer,
+                   'password': fields.String,
                    'user_id': fields.Integer}

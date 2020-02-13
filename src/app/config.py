@@ -1,6 +1,6 @@
 import os
 
-
+# URL api for CheckPass resource
 CHECK_PASS_API = 'https://api.pwnedpasswords.com/range/'
 
 
