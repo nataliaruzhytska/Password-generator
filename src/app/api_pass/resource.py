@@ -66,7 +66,7 @@ class PasswordSave(Resource):
 
     def delete(self, password_id):
         """
-        Save password in database for user is login
+        Delete password from database for user is login
         :param password_id:
         :return: str
         """
