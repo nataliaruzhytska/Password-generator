@@ -46,7 +46,7 @@ Delete password from database for user is login
 > Password Check:
 ```
 GET
-http://localhost:5000//check/<int:password_id>
+http://localhost:5000/check/<int:password_id>
 ```
 Check password SHA1 hash in online hash base using api https://haveibeenpwned.com/API/v3
 
