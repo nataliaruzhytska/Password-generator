@@ -7,12 +7,12 @@ Authentication
 > Registration:
 ```
 POST
-http://localhost:5000/register
+/register
 ```
 > Log In:
 ```
 POST
-http://localhost:5000/login
+/login
 ```
 > Log Out:
 ```
@@ -22,31 +22,31 @@ http://localhost:5000/logout
 >Password Generator:
 ```
 POST
-http://localhost:5000/
+/
 ```
 Generate a random password using user-defined parameters and evaluates its difficulty
 
 > Password Storage:
 ```
 GET
-http://localhost:5000/save
+/save
 ```
 Show stored password for user if user is login
 ```
 POST
-http://localhost:5000/save
+/save
 ```
 Save password in database for user is login
 ```
 DELETE
-http://localhost:5000/save/<password_id>
+/save/<password_id>
 ```
 Delete password from database for user is login
 
 > Password Check:
 ```
 GET
-http://localhost:5000/check/<int:password_id>
+/check/<int:password_id>
 ```
 Check password SHA1 hash in online hash base using api https://haveibeenpwned.com/API/v3
 
